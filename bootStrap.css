@@ -1,0 +1,25 @@
+* {
+    font-family: 'Stylish', cursive;
+}
+
+.card-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+
+}
+.comment{
+    color: blue;
+}
+
+.form{
+    width: 500px;
+    margin: 10px auto 30px auto;
+    border-color: black;
+    border-width: 3px;
+    border-style: solid;
+    padding: 25px;
+    border-radius: 5px;
+}
