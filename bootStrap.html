@@ -20,8 +20,35 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
         crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+        
 
     <title>SW사관학교 정글 | 부트스트랩 연습하기</title>
+
+    <script>
+        function hey(){
+            alert('안녕!');
+        }
+
+        function hello(){
+            console.log("Hello");
+        }
+
+        function postBtn(){
+            if($('#form').css('display') == 'none'){
+                $('#form').show();
+                $('#btn-posting-box').text("포스팅박스 닫기");
+            }else{
+                $('#form').hide();
+                $('#btn-posting-box').text("포스팅박스 열기");
+            }
+            
+        }
+        $(document).ready(function(){
+	alert('페이지가 로딩되었습니다.')
+});
+    </script>
 </head>
 
 <body>
@@ -32,10 +59,10 @@
             <h1 class="display-4">나홀로 링크 메모장!</h1>
             <p class="lead">중요한 링크를 저장해두고, 나중에 볼 수 있는 공간입니다.</p>
             <hr class="my-4">
-            <a class="btn btn-primary btn-lg" href="#" role="button">포스팅박스 열기</a>
+            <a class="btn btn-primary btn-lg" href="#" role="button" id="btn-posting-box" onclick="postBtn()">포스팅박스 열기</a>
         </div>
 
-        <div class="form">
+        <div class="form" id="form">
             <div class="form-group">
                 <label for="exampleInputEmail1">아티클 URL</label>
                 <input type="text" class="form-control" id="exampleInputEmail1"
@@ -43,17 +70,17 @@
                
             </div>
             <div class="form-group">
-                <label for="exampleInputEmail1">간단 코멘트</label>
-                <textarea type="text" class="form-control" id="exampleInputEmail1"
+                <label for="exampleInputComment">간단 코멘트</label>
+                <textarea type="text" class="form-control" id="exampleInputComment"
                 ></textarea>
 
             </div>
 
-            <button type="submit" class="btn btn-primary">기사 저장</button>
+            <button type="submit" class="btn btn-primary" onclick="hello()">기사 저장</button>
         </div>
 
 
-        <div class="card-columns">
+        <div class="card-columns" id="cards-box">
             <div class="card">
                 <img src="https://www.eurail.com/content/dam/images/eurail/Italy%20OCP%20Promo%20Block.adaptive.767.1535627244182.jpg"
                     class="card-img-top" alt="...">
