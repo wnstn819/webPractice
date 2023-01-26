@@ -3,8 +3,9 @@ from bs4 import BeautifulSoup
 
 from pymongo import MongoClient
 
-client = MongoClient('localhost', 27017)
-db = client.dbjungle
+#client = MongoClient('localhost', 27017)
+client = MongoClient('mongodb://test:test@54.180.160.102', 27017)
+db = client.admin
 
 
 # DB에 저장할 영화인들의 출처 url을 가져옵니다.
