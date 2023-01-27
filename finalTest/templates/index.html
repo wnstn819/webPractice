@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>마지막 테스트 예제</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css" />
+    <link rel="stylesheet" href="test.css"/>
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script>
+        
+        $(document).ready(()=>{
+            $('.addForm').hide()
+            showStart();
+        })
+
+        // api로 데이터 가져와서 쏴주기
+        function showStart(){
+            $('#star-box').empty()
+           
+            $.ajax({
+                type:"GET",
+                url: "/final/list",
+                data:{},
+                success: function(res){
+                    let stars = res['list']
+                    for(let i = 0; i<stars.length;i++){
+                        let star = stars[i]
+                        let name = star['name']
+                        let recentWork = star['recent']
+                        let like = star['like']
+
+                        let tempHtml = `<div class="card">
+                                <div class="card-content">
+                                  <div class="media">
+                                    <div class="media-left">
+                                      <figure class="image is-48x48">
+                                        <img src="https://search.pstatic.net/common/?src=https%3A%2F%2Fssl.pstatic.net%2Fsstatic%2Fpeople%2Fportrait%2F201807%2F20180731143610623-6213324.jpg&type=u120_150&quality=95"
+                                alt="Placeholder image" />
+                                      </figure>
+                                    </div>
+                                    <div class="media-content">
+                                      <a href="#" target="_blank" class="star-name title is-4">${name} (좋아요: ${like})</a>
+                                      <p class="subtitle is-6">${recentWork}</p>
+                                    </div>
+                                  </div>
+                                </div>
+                                <footer class="card-footer">
+                                  <a href="#" onclick="likeStar('${name}')" class="card-footer-item has-text-info">
+                                    위로!
+                                    <span class="icon">
+                                      <i class="fas fa-thumbs-up"></i>
+                                    </span>
+                                  </a>
+                                  <a href="#" onclick="deleteStar('${name}')" class="card-footer-item has-text-danger">
+                                    삭제
+                                    <span class="icon">
+                                      <i class="fas fa-ban"></i>
+                                    </span>
+                                  </a>
+                                </footer>
+                              </div>`
+
+                              $('#star-box').append(tempHtml)
+                    }
+                }
+                
+            })
+    
+
+       
+
+        }
+
+        function likeStar(name){
+            console.log(name);
+            $.ajax({
+                type: 'POST',
+                url: '/final/like',
+                data: {'name_give':name},
+                success: function (response) {
+                    if (response['result'] == 'success') {
+                        alert('좋아요 완료!')
+                        showStart();
+                    }
+                }
+            });
+
+        }
+        function showForm(){
+            if($('.addForm').css('display')=='block'){
+                $('.addForm').hide()
+            }else{
+                $('.addForm').show()
+            }
+        }
+
+        function deleteStar(name){
+            $.ajax({
+                type:'POST',
+                url:'final/delete',
+                data:{'name':name},
+                success: (res)=>{
+                    if(res['result'] == 'success'){
+                        showStart()
+                    }
+                }
+            })
+
+        }
+        
+        function addStar(){
+
+            let name = $("#post-url").val();
+            let recent = $("#post-comment").val();
+            $.ajax({
+                type:'POST',
+                url:'/final/add',
+                data:{'name': name, 'recent':recent},
+                success: (res)=>{
+                    if(res['result'] == 'success'){
+                        showStart()
+                        $("#post-url").val("");
+                        $("#post-comment").val("");
+                    }
+                }
+            })
+
+
+        }
+
+
+    </script>
+
+</head>
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    <section class="hero is-warning">
+        <div class="hero-body">
+            <div class="container center">
+                <h1 class="title">
+                    마이 페이보릿 무비스타😆
+                </h1>
+                <h2 class="subtitle">
+                    순위를 매겨봅시다
+                </h2>
+                <button type="button" class="btn btn-primary" onclick="showForm()">인물 추가</button>
+            </div>
+        </div>
+    </section>
+    <div id="post-box" class="addForm" style="display:none">
+        <div>
+            <div class="form-group">
+                <label for="post-url">이름</label>
+                <input id="post-url" class="form-control" placeholder="">
+            </div>
+            <div class="form-group">
+                <label for="post-comment">설명</label>
+                <textarea id="post-comment" class="form-control" rows="2"></textarea>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="addStar()">인물 저장</button>
+        </div>
+    </div>
+    <div class="star-list" id="star-box">
+        <div class="card">
+            <div class="card-content">
+                <div class="media">
+                    <div class="media-left">
+                        <figure class="image is-48x48">
+                            <img src="https://search.pstatic.net/common/?src=https%3A%2F%2Fssl.pstatic.net%2Fsstatic%2Fpeople%2Fportrait%2F201807%2F20180731143610623-6213324.jpg&type=u120_150&quality=95"
+                                alt="Placeholder image" />
+                        </figure>
+                    </div>
+                    <div class="media-content">
+                        <a href="#" target="_blank" class="star-name title is-4">김다미 (좋아요: 3)</a>
+                        <p class="subtitle is-6">안녕, 나의 소울메이트(가제)</p>
+                    </div>
+                </div>
+            </div>
+            <footer class="card-footer">
+                <a href="#" onclick="likeStar('김다미')" class="card-footer-item has-text-info">
+                    위로!
+                    <span class="icon">
+                        <i class="fas fa-thumbs-up"></i>
+                    </span>
+                </a>
+                <a href="#" onclick="deleteStar('김다미')" class="card-footer-item has-text-danger">
+                    삭제
+                    <span class="icon">
+                        <i class="fas fa-ban"></i>
+                    </span>
+                </a>
+            </footer>
+        </div>
+    </div>
+</body>
+</html>
